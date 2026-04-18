@@ -100,13 +100,11 @@
         @media (max-width: 150mm) {
             .controls {
                 left: 50%;
-                top: 32px;
-                transform: translateX(-50%) translateZ(0);
+                top: 24px;
+                transform: translateX(-50%);
                 flex-direction: row;
                 gap: 8px;
-        z-index: 9999; /* 🔹 Гарантирует приоритет отрисовки */
-        will-change: transform; /* 🔹 Подсказывает браузеру вынести слой в GPU, убирая дёрганье */
-    }
+            }
             .control-btn { width: 54px; height: 54px; }
             .btn-icon { width: 12px; height: 12px; margin-bottom: 2px; }
             .btn-main { font-size: 9px; }
@@ -816,6 +814,15 @@
     "Франчайзинг"
   ]
 }
+</script>
+    <script>
+  // Фиксация кнопок при динамическом изменении viewport (адресная строка мобильных браузеров)
+  if (window.visualViewport) {
+    const controls = document.querySelector('.controls');
+    window.visualViewport.addEventListener('resize', () => {
+      controls.style.top = '24px';
+    });
+  }
 </script>
 </body>
 </html>
