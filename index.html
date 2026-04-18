@@ -3,9 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Рузанов Иван — Head of Sales | Руководитель коммерческого департамента с 13-летним опытом в B2B и digital. Управление командами до 40 человек, выручка 10+ млрд руб.">
+    <meta property="og:title" content="Рузанов Иван - Head of Sales">
+    <meta property="og:description" content="Руководитель коммерческого департамента | Head of Sales | Директор по развитию бизнеса">
+    <meta property="og:type" content="website">
     <title>Рузанов Иван - Head of Sales</title>
+    
+    <!-- Preload critical fonts for better performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -76,7 +84,7 @@
             .btn-sub { font-size: 6px; }
         }
 
-                /* ЛИСТ РЕЗЮМЕ */
+        /* ЛИСТ РЕЗЮМЕ */
         .canvas {
             width: 100%;
             max-width: 230mm;
@@ -92,8 +100,6 @@
             
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
             overflow: hidden;
-            
-            /* 🔧 ИСПРАВЛЕНИЕ 2: Убрали transition, чтобы не было задержки/лагов */
         }
 
         /* ШАПКА */
@@ -332,47 +338,49 @@
             .skills { column-count: 2; column-gap: 20px; }
         }
 
-        /* ПЕЧАТЬ / PDF */
+        /* ПЕЧАТЬ / PDF - ОБЪЕДИНЁННЫЙ БЛОК */
         @media print {
-            body { background: #fff; padding: 0; }
-            .controls { display: none; }
-            .canvas {
-                box-shadow: none; margin: 0; width: 100%; max-width: 100%;
-                padding: 10mm; overflow: visible;
-            }
-            .header { flex-direction: row !important; }
-            .header-text { z-index: 2 !important; }
-            .photo { opacity: 1 !important; margin-left: 0 !important; z-index: 1 !important; }
-            .name br.break-name { display: none !important; }
-            .target-header { flex-direction: row !important; }
-            .content { flex-direction: row !important; gap: 40px; }
-            .col-left { display: flex !important; width: 220px; border-right: 1px solid rgba(0,0,0,0.12); border-bottom: none; padding-right: 25px; padding-bottom: 0; }
-            .block-contacts, .block-skills, .col-right { order: unset !important; width: auto !important; }
-            .skills { column-count: 1 !important; }
-        }
-        /* Настройка для ручной печати (Ctrl+P) */
-      @page { size: auto; margin: 0; }
-        @media print {
+            @page { size: auto; margin: 0; }
             body { 
                 background: #fff; 
                 padding: 0; 
-                -webkit-print-color-adjust: exact; 
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
-            .controls { display: none; }
+            .controls { display: none !important; }
             .canvas {
                 box-shadow: none; 
                 margin: 0; 
-                width: 210mm; /* Фиксируем ширину для печати */
+                width: 210mm;
                 max-width: 210mm;
-                padding: 15mm 20mm; /* Твои поля */
-                min-height: 1500mm; /* Минимальная высота */
+                padding: 15mm 20mm;
+                min-height: auto;
                 overflow: visible;
             }
-            /* Возвращаем структуру, если была мобильная */
-            .content { flex-direction: row !important; }
-            .col-left { display: flex !important; width: 220px; border-right: 1px solid rgba(0,0,0,0.12); }
-            .block-contacts, .block-skills, .col-right { order: unset !important; }
-            .photo { opacity: 1 !important; margin-left: 0 !important; }
+            .header { flex-direction: row !important; }
+            .header-text { z-index: 2 !important; }
+            .photo { 
+                opacity: 1 !important; 
+                margin-left: 0 !important; 
+                z-index: 1 !important; 
+            }
+            .name br.break-name { display: none !important; }
+            .target-header { flex-direction: row !important; }
+            .content { flex-direction: row !important; gap: 40px; }
+            .col-left { 
+                display: flex !important; 
+                width: 220px; 
+                border-right: 1px solid rgba(0,0,0,0.12); 
+                border-bottom: none; 
+                padding-right: 25px; 
+                padding-bottom: 0; 
+            }
+            .block-contacts, .block-skills, .col-right { 
+                order: unset !important; 
+                width: auto !important; 
+            }
+            .skills { column-count: 1 !important; }
+            .exp-block.short-hide { display: block !important; }
         }
     </style>
 </head>
@@ -380,15 +388,15 @@
 
     <!-- 🔹 КНОПКИ -->
     <div class="controls">
-        <button class="control-btn active" onclick="toggleVersion('full')" id="btn-full">
+        <button type="button" class="control-btn active" onclick="toggleVersion('full')" id="btn-full" aria-label="Полная версия резюме">
             <span class="btn-main">Full</span>
             <span class="btn-sub">Version</span>
         </button>
-        <button class="control-btn" onclick="toggleVersion('short')" id="btn-short">
+        <button class="control-btn" onclick="toggleVersion('short')" id="btn-short" aria-label="Короткая версия резюме">
             <span class="btn-main">Short</span>
             <span class="btn-sub">Version</span>
         </button>
-        <button class="control-btn" onclick="downloadPDF()">
+        <button class="control-btn" onclick="downloadPDF()" aria-label="Скачать PDF">
             <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                 <polyline points="7 10 12 15 17 10"></polyline>
@@ -405,7 +413,7 @@
             <div class="job-cat">Head of Sales</div>
             <h1 class="name">Рузанов<br>Иван <br class="break-name">Андреевич</h1>
         </div>
-        <img src="photo.png" class="photo" alt="Фото">
+        <img src="photo.png" class="photo" alt="Фото Рузанова Ивана" loading="eager">
     </header>
 
     <div class="divider"></div>
@@ -439,7 +447,7 @@
                         +7 911 766 66 00
                     </div>
                 </a>
-                <a href="https://t.me/ivanruzanov" target="_blank" class="contact-link">
+                <a href="https://t.me/ivanruzanov" target="_blank" rel="noopener noreferrer" class="contact-link">
                     <div class="contact-item">
                         <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M22 2L11 13"></path>
@@ -643,68 +651,41 @@
 </div>
 
 <script>
+    // Глобальная переменная для отслеживания текущей версии
+    let currentVersion = 'full';
+
     function toggleVersion(version) {
         const blocks = document.querySelectorAll('.exp-block');
         const btnFull = document.getElementById('btn-full');
         const btnShort = document.getElementById('btn-short');
+        
         if (version === 'short') {
             blocks.forEach(b => { if(b.classList.contains('short-hide')) b.style.display = 'none'; });
-            btnShort.classList.add('active'); btnFull.classList.remove('active');
+            btnShort.classList.add('active'); 
+            btnFull.classList.remove('active');
         } else {
             blocks.forEach(b => { b.style.display = 'block'; });
-            btnFull.classList.add('active'); btnShort.classList.remove('active');
+            btnFull.classList.add('active'); 
+            btnShort.classList.remove('active');
         }
+        
+        currentVersion = version;
         localStorage.setItem('resumeVersion', version);
     }
-
-            function downloadPDF() {
-        const element = document.getElementById('resume');
-        const ver = document.getElementById('btn-short').classList.contains('active') ? 'Short' : 'Full';
-        const controls = document.querySelector('.controls');
-        const btn = controls.lastElementChild;
-        const originalBtnContent = btn.innerHTML;
-
-        controls.style.opacity = '0'; 
-        controls.style.pointerEvents = 'none';
-        btn.innerHTML = '⏳...';
-        window.scrollTo(0, 0);
-
-        // 🔧 1. ИЗМЕРЯЕМ РЕАЛЬНУЮ ВЫСОТУ КОНТЕНТА ПЕРЕД ГЕНЕРАЦИЕЙ
-        const pxToMm = 0.264583;
-        const dynamicHeight = Math.ceil(element.scrollHeight * pxToMm) + 8; // +8мм страховочный зазор
-
-        const opt = {
-            margin: 0,
-            filename: `Ruzanov_Ivan_Head_of_Sales_${ver}.pdf`,
-            image: { type: 'jpeg', quality: 0.95 },
-            html2canvas: { 
-                scale: 1.5, 
-                useCORS: true, 
-                logging: false,
-                windowWidth: document.documentElement.clientWidth 
-            },
-            jsPDF: { 
-                unit: 'mm', 
-                format: [210, dynamicHeight], // 🔧 2. ПОДСТАВЛЯЕМ РАССЧИТАННУЮ ВЫСОТУ ВМЕСТО 1500
-                orientation: 'portrait' 
-            },
-            pagebreak: { mode: 'avoid-all' }
-        };
-
-        html2pdf().set(opt).from(element).save().then(() => {
-            controls.style.opacity = '1';
-            controls.style.pointerEvents = 'auto';
-            btn.innerHTML = originalBtnContent;
-        }).catch(() => {
-            controls.style.opacity = '1';
-            controls.style.pointerEvents = 'auto';
-            btn.innerHTML = originalBtnContent;
-            
-            // 🔧 3. ОБНОВЛЁННЫЙ ТЕКСТ ПРЕДУПРЕЖДЕНИЯ
-            if(confirm('Ваш браузер не смог сгенерировать длинный PDF автоматически. Использовать системную печать (Ctrl+P)?')) {
-                window.print();
-            }
-        });
+    function downloadPDF() {
+        const filename = currentVersion === 'full' 
+            ? 'Ivan Ruzanov - Head of Sales - full.pdf'
+            : 'Ivan Ruzanov - Head of Sales - short.pdf';
+        
+        const link = document.createElement('a');
+        link.href = filename;
+        // Явно прописываем атрибут download, чтобы браузер не открывал файл
+        link.setAttribute('download', filename); 
+        link.style.display = 'none'; // Скрываем элемент
+        
+        document.body.appendChild(link);
+        link.click(); // Эмулируем клик
+        document.body.removeChild(link); // Удаляем после клика
     }
     function updatePhotoAnimation() {
         const widthPx = window.innerWidth;
@@ -731,9 +712,13 @@
         }
     }
     
+    // Инициализация при загрузке
     window.addEventListener('resize', updatePhotoAnimation, { passive: true });
-    window.addEventListener('DOMContentLoaded', updatePhotoAnimation);
-    window.addEventListener('load', () => toggleVersion(localStorage.getItem('resumeVersion') || 'full'));
+    window.addEventListener('DOMContentLoaded', () => {
+        updatePhotoAnimation();
+        const savedVersion = localStorage.getItem('resumeVersion') || 'full';
+        toggleVersion(savedVersion);
+    });
 </script>
 </body>
 </html>
