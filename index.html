@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Рузанов Иван - Head of Sales</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #f4f4f4;
+            font-family: 'Open Sans', sans-serif;
+            color: #333;
+            line-height: 1.5;
+            padding: 20px;
+        }
+        
+        /* 🔹 КНОПКИ - всегда fixed, чтобы не сдвигать контент */
+        .controls {
+            position: fixed;
+            left: 15px;
+            top: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .control-btn {
+            width: 62px;
+            height: 62px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s ease;
+            padding: 0;
+            overflow: hidden;
+        }
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        }
+        .control-btn.active {
+            background: #1a1a1a;
+            color: #fff;
+            border-color: #1a1a1a;
+        }
+        .btn-main { font-size: 10px; font-weight: 500; line-height: 1.2; }
+        .btn-sub { font-size: 7px; font-weight: 300; opacity: 0.8; margin-top: 1px; }
+        .btn-icon { width: 14px; height: 14px; margin-bottom: 3px; fill: currentColor; }
+
+        /* Мобильное позиционирование кнопок (без скачка контента) */
+        @media (max-width: 150mm) {
+            .controls {
+                left: 50%;
+                top: 12px;
+                transform: translateX(-50%);
+                flex-direction: row;
+                gap: 8px;
+            }
+            .control-btn { width: 54px; height: 54px; }
+            .btn-icon { width: 12px; height: 12px; margin-bottom: 2px; }
+            .btn-main { font-size: 9px; }
+            .btn-sub { font-size: 6px; }
+        }
+
+                /* ЛИСТ РЕЗЮМЕ */
+        .canvas {
+            width: 100%;
+            max-width: 230mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            background: #fff;
+            
+            /* 🔧 ИСПРАВЛЕНИЕ 1: Явно задаем левое и правое поле одинаково */
+            padding-top: 15mm;
+            padding-bottom: 15mm;
+            padding-left: clamp(8mm, 9.5vw, 20mm);
+            padding-right: clamp(8mm, 9.5vw, 20mm);
+            
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            overflow: hidden;
+            
+            /* 🔧 ИСПРАВЛЕНИЕ 2: Убрали transition, чтобы не было задержки/лагов */
+        }
+
+        /* ШАПКА */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: visible;
+        }
+        .header-text {
+            position: relative;
+            z-index: 2;
+            flex-shrink: 0;
+        }
+        .job-cat {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .name {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            font-size: 44px;
+            line-height: 1.1;
+            color: #000;
+            margin-left: -3px; 
+        }
+        .name br.break-name { display: none; }
+        
+        .photo {
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            max-width: 100%;
+            position: relative;
+            z-index: 1;
+            opacity: var(--photo-opacity, 1);
+            margin-left: var(--photo-margin, 0);
+            will-change: opacity, margin-left;
+        }
+
+        .divider {
+            border-top: 1px solid #000;
+            opacity: 0.12;
+            margin: 25px 0;
+        }
+
+        /* ОСНОВНАЯ РАСКЛАДКА */
+        .content {
+            display: flex;
+            gap: 40px;
+        }
+        .col-left {
+            width: 220px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding-right: 25px;
+            border-right: 1px solid rgba(0,0,0,0.12);
+        }
+        .col-right {
+            flex: 1;
+        }
+
+        h3 {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 300;
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: #000;
+        }
+
+        /* КОНТАКТЫ */
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            font-size: 12px;
+            color: #555;
+        }
+        .contact-icon {
+            width: 16px;
+            height: 16px;
+            object-fit: contain;
+            opacity: 0.6;
+        }
+        .contact-link {
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .contact-link:hover .contact-item {
+            opacity: 0.7;
+        }
+
+        /* НАВЫКИ */
+        .skills {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .skills li {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            font-size: 12px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 3px;
+        }
+
+        /* ЦЕЛЕВАЯ ПОЗИЦИЯ И ЗАРПЛАТА */
+        .target-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 10px;
+            gap: 10px;
+        }
+        .salary {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
+            font-size: 18px;
+            color: #999999;
+            white-space: nowrap;
+        }
+        .target-text {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        /* ПРОФИЛЬ */
+        .profile-text {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #000;
+            text-align: justify;
+            margin-bottom: 25px;
+        }
+
+        /* ОПЫТ */
+        .exp-block { margin-bottom: 25px; }
+        
+        .exp-company {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            font-size: 12px;
+            color: #000;
+        }
+        .exp-city {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            font-size: 12px;
+            color: #000;
+        }
+        
+        .exp-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            font-size: 12px;
+            margin: 6px 0 3px;
+            color: #000;
+        }
+        
+        .exp-period {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            font-size: 12px;
+            color: #666666;
+            margin-bottom: 6px;
+        }
+        
+        .exp-subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            font-size: 12px;
+            color: #666666;
+            margin: 10px 0 4px;
+        }
+        
+        .exp-list {
+            padding-left: 18px;
+            margin: 0;
+        }
+        .exp-list li {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            font-size: 12px;
+            color: #666666;
+            line-height: 1.5;
+            margin-bottom: 4px;
+            list-style-type: disc;
+        }
+
+        .exp-block.short-hide { display: none; }
+
+        /* ========================================= */
+        /* 🔧 ТОЧКИ АДАПТИВНОСТИ                     */
+        /* ========================================= */
+
+        /* ТОЧКА 1: 198mm - перенос зарплаты и отчества */
+        @media (max-width: 198mm) {
+            .target-header { flex-direction: column; align-items: flex-start; gap: 4px; }
+            .name br.break-name { display: inline; }
+        }
+
+        /* ТОЧКА 2: 170mm -> 135mm - анимация фото управляется JS */
+        
+        /* ТОЧКА 3: 150mm - перестройка в одну колонку */
+        @media (max-width: 150mm) {
+            .content { flex-direction: column; gap: 25px; }
+            .col-left { display: contents; }
+            .block-contacts {
+                order: 1; width: 100%;
+                border-right: none; border-bottom: 1px solid rgba(0,0,0,0.12);
+                padding-right: 0; padding-bottom: 15px;
+            }
+            .col-right { order: 2; width: 100%; }
+            .block-skills { order: 3; width: 100%; }
+            .skills { column-count: 2; column-gap: 20px; }
+        }
+
+        /* ПЕЧАТЬ / PDF */
+        @media print {
+            body { background: #fff; padding: 0; }
+            .controls { display: none; }
+            .canvas {
+                box-shadow: none; margin: 0; width: 100%; max-width: 100%;
+                padding: 10mm; overflow: visible;
+            }
+            .header { flex-direction: row !important; }
+            .header-text { z-index: 2 !important; }
+            .photo { opacity: 1 !important; margin-left: 0 !important; z-index: 1 !important; }
+            .name br.break-name { display: none !important; }
+            .target-header { flex-direction: row !important; }
+            .content { flex-direction: row !important; gap: 40px; }
+            .col-left { display: flex !important; width: 220px; border-right: 1px solid rgba(0,0,0,0.12); border-bottom: none; padding-right: 25px; padding-bottom: 0; }
+            .block-contacts, .block-skills, .col-right { order: unset !important; width: auto !important; }
+            .skills { column-count: 1 !important; }
+        }
+        /* Настройка для ручной печати (Ctrl+P) */
+      @page { size: auto; margin: 0; }
+        @media print {
+            body { 
+                background: #fff; 
+                padding: 0; 
+                -webkit-print-color-adjust: exact; 
+            }
+            .controls { display: none; }
+            .canvas {
+                box-shadow: none; 
+                margin: 0; 
+                width: 210mm; /* Фиксируем ширину для печати */
+                max-width: 210mm;
+                padding: 15mm 20mm; /* Твои поля */
+                min-height: 1500mm; /* Минимальная высота */
+                overflow: visible;
+            }
+            /* Возвращаем структуру, если была мобильная */
+            .content { flex-direction: row !important; }
+            .col-left { display: flex !important; width: 220px; border-right: 1px solid rgba(0,0,0,0.12); }
+            .block-contacts, .block-skills, .col-right { order: unset !important; }
+            .photo { opacity: 1 !important; margin-left: 0 !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 🔹 КНОПКИ -->
+    <div class="controls">
+        <button class="control-btn active" onclick="toggleVersion('full')" id="btn-full">
+            <span class="btn-main">Full</span>
+            <span class="btn-sub">Version</span>
+        </button>
+        <button class="control-btn" onclick="toggleVersion('short')" id="btn-short">
+            <span class="btn-main">Short</span>
+            <span class="btn-sub">Version</span>
+        </button>
+        <button class="control-btn" onclick="downloadPDF()">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span class="btn-main">PDF</span>
+        </button>
+    </div>
+
+<div class="canvas" id="resume">
+    <!-- ШАПКА -->
+    <header class="header">
+        <div class="header-text">
+            <div class="job-cat">Head of Sales</div>
+            <h1 class="name">Рузанов<br>Иван <br class="break-name">Андреевич</h1>
+        </div>
+        <img src="photo.png" class="photo" alt="Фото">
+    </header>
+
+    <div class="divider"></div>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
+    <div class="content">
+        <div class="col-left">
+            <div class="block-contacts">
+                <h3>Контакты</h3>
+                <a href="mailto:ivanruzanov@gmail.com" class="contact-link">
+                    <div class="contact-item">
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        ivanruzanov@gmail.com
+                    </div>
+                </a>
+                <div class="contact-item">
+                    <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    Санкт-Петербург
+                </div>
+                <a href="tel:+79117666600" class="contact-link">
+                    <div class="contact-item">
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        </svg>
+                        +7 911 766 66 00
+                    </div>
+                </a>
+                <a href="https://t.me/ivanruzanov" target="_blank" class="contact-link">
+                    <div class="contact-item">
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 2L11 13"></path>
+                            <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+                        </svg>
+                        @ivanruzanov
+                    </div>
+                </a>
+            </div>
+            <div class="block-skills">
+                <h3>Навыки</h3>
+                <ul class="skills">
+                    <li>Управление командой</li><li>Управление P&L</li><li>Управление продажами</li>
+                    <li>Enterprise Sales и B2B</li><li>Управление ключевыми клиентами (KAM)</li>
+                    <li>Разработка систем мотивации (юнит-экономика)</li><li>Управление проектами</li>
+                    <li>Стратегическое управление эффективностью (OKR/KPI)</li>
+                    <li>Кросс-функциональное взаимодействие</li><li>Юнит-экономика и ценообразование</li>
+                    <li>Развитие территорий (Geo-expansion)</li><li>GTM-стратегии и вывод продуктов</li>
+                    <li>Франчайзинг и партнёрские сети</li><li>Цифровая трансформация бизнес-процессов</li>
+                    <li>Бюджетирование и финансовое планирование</li><li>CRM (внедрение и развитие)</li>
+                    <li>Аналитика данных (Looker, Excel)</li><li>Наставничество и развитие лидеров</li>
+                    <li>Оптимизация бизнес-процессов</li><li>Agile / Scrum</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-right">
+            <div class="target-header">
+                <h3>Целевая позиция</h3>
+                <span class="salary">от 350 000 ₽</span>
+            </div>
+            <div class="target-text">Руководитель коммерческого департамента | Head of Sales | Директор по развитию бизнеса</div>
+            <div class="divider"></div>
+            <h3>Профессиональный профиль</h3>
+            <div class="profile-text">Руководитель по развитию бизнеса с 13-летним опытом в B2B и digital. Управлял командами до 40 человек и портфелями с годовой выручкой более 10 млрд руб. Эксперт в масштабировании выручки, запуске новых направлений с нуля и цифровой трансформации. Опыт в управлении P&L, внедрении KPI/OKR на основе юнит-экономики, развитии партнерских сетей и использовании AI для роста эффективности. Сочетаю стратегическое мышление с практическим опытом построения отделов продаж и кросс-функциональных команд.</div>
+            <div class="divider"></div>
+            <h3>Опыт</h3>
+            
+            <div class="exp-block">
+                <div class="exp-header"><span class="exp-company">Яндекс.</span> <span class="exp-city">Санкт-Петербург | Июнь 2021 - Декабрь 2025</span></div>
+                <div style="margin-bottom: 18px;">
+                    <div class="exp-title">Руководитель команды развития бизнеса ключевых клиентов (KAM)</div>
+                    <div class="exp-period">Август 2024 - Декабрь 2025 (1 год и 5 месяцев)</div>
+                    <ul class="exp-list">
+                        <li>Управлял региональной командой КАМ из 12 сотрудников, контролировал портфель из более 250 ключевых клиентов с вверенной годовой выручкой свыше 10 млрд руб.</li>
+                        <li>Обеспечил устойчивый рост выручки по базе более чем на 12% год к году по основным продуктам, удерживая команду в лидерах отдела по итогам трёх кварталов подряд.</li>
+                        <li>Вёл переговоры и заключал годовые партнёрства с приоритетными клиентами (чеки сделок до 250 млн руб./год).</li>
+                        <li>Обеспечил рекордный рост geo-сегмента продукта: +45,5% год к году, квартальное выполнение планов по направлению на уровне 101–135%.</li>
+                        <li>Внедрил в рабочие процессы команды сценарии применения ИИ: автоматизация анализа клиентского размещения, ускорение подготовки офферов, использование GPT-триггеров для оценки коммуникаций.</li>
+                    </ul>
+                </div>
+                <div style="margin-bottom: 18px;">
+                    <div class="exp-title">Руководитель команды развития бизнеса SMB клиентов</div>
+                    <div class="exp-period">Январь 2022 - Август 2024 (2 года и 8 месяцев)</div>
+                    <div class="exp-subtitle">Управление командой и выполнение планов</div>
+                    <ul class="exp-list">
+                        <li>Управлял кросс-функциональной командой из 8 человек. Обеспечивал регулярное перевыполнение квартального плана продаж в среднем на 110%. Команда стабильно занимала 1-е место в отделе по выручке, показателям влияния на выручку, качеству и темпам работы.</li>
+                        <li>Выстроил систему найма, онбординга и развития сотрудников. В период масштабирования полностью укомплектовал две новые команды для СЗФО, подготовил и вывел на позиции Teamlead 5 менеджеров, ещё 10+ специалистов выросли до Senior/Lead или перешли в вышестоящие тиры.</li>
+                    </ul>
+                    <div class="exp-subtitle">Рост портфеля и дополнительные источники выручки</div>
+                    <ul class="exp-list">
+                        <li>Отвечал за портфель из 500+ клиентов SMB с суммарной выручкой свыше 170 млн руб./мес., обеспечивая прирост инвестиций более 12% за квартал.</li>
+                        <li>Запускал и масштабировал инициативы по увеличению дохода: ежемесячные бизнес-завтраки (дополнительно от 4 млн руб./мес.), процесс кастомной офферизации (более 200 млн руб. доп. выручки за квартал в масштабах отдела), внедрение воронки офферов и системы доходимости до ЛПР.</li>
+                    </ul>
+                    <div class="exp-subtitle">Кросс-функциональное взаимодействие и развитие процессов</div>
+                    <ul class="exp-list">
+                        <li>Инициировал и координировал отраслевые спринты и продуктовые проработки на уровне отдела (20+ команд) для сезонной и отраслевой активации клиентской базы.</li>
+                        <li>Участвовал в развитии CRM и аналитических дашбордов: формировал требования, тестировал функционал (телефония, мессенджеры, разметка), внедрял решения по автоматизации.</li>
+                        <li>Регулярно проводил обучения по темам управления командой, найма, планирования, построения KPI, ораторского мастерства и пр. для линейных сотрудников и руководителей.</li>
+                        <li>Реализовал проект по повышению качества обслуживания, обеспечив рост показателя CSAT по дивизиону (до 100 команд) до целевого уровня.</li>
+                    </ul>
+                </div>
+                <div style="margin-bottom: 18px;">
+                    <div class="exp-title">Менеджер по развитию клиентов</div>
+                    <div class="exp-period">Июнь 2021 - Декабрь 2021 (7 месяцев)</div>
+                    <ul class="exp-list">
+                        <li>Стабильно два квартала достигал максимального порога эффективности 120% по KPI (требовало перевыполнения личного плана в среднем в 2 раза).</li>
+                        <li>Быстрое погружение в продуктовую линейку Яндекс.Рекламы, что позволило получить повышение до руководителя группы через 6 месяцев работы.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="exp-block short-hide" data-version="full">
+                <div class="exp-header"><span class="exp-company">Фонд поддержки слепоглухих «Со-единение».</span> <span class="exp-city">Санкт-Петербург</span></div>
+                <div class="exp-title">Руководитель проектов</div>
+                <div class="exp-period">Май 2019 - Февраль 2021 (1 год и 10 месяцев)</div>
+                <ul class="exp-list">
+                    <li>Обеспечил полное документальное сопровождение и сдачу в эксплуатацию Реабилитационного центра для слепоглухих в Ленинградской области.</li>
+                    <li>Выстроил систему управления строительством в некоммерческой организации, не имеющей профильного опыта.</li>
+                    <li>Гарантировал 100% прозрачность бюджета и успешное прохождение аудита Казначейства РФ в условиях сжатых сроков.</li>
+                    <li>Получил высокую оценку донора и благодарность за реализацию проекта.</li>
+                </ul>
+            </div>
+
+            <div class="exp-block" data-version="both">
+                <div class="exp-header"><span class="exp-company">УК Дети на паркете.</span> <span class="exp-city">Санкт-Петербург</span></div>
+                <div class="exp-title">Директор по франчайзингу</div>
+                <div class="exp-period">Октябрь 2016 - Январь 2018 (1 год и 4 месяца)</div>
+                <ul class="exp-list">
+                    <li>Упаковал франшизу «с нуля»: документация, маркетинг-кит, стандарты работы и финансовая модель.</li>
+                    <li>Сформировал отделы продаж и сопровождения: найм, обучение, стандарты, внедрение KPI и регулярной отчётности.</li>
+                    <li>Масштабировал партнерскую сеть: рост с 15 до 122 филиалов, география с 1 до 32 городов РФ.</li>
+                    <li>Обеспечил рост доходности партнёров: загрузка точек >70%, окупаемость франшизы 2–4 месяца.</li>
+                </ul>
+            </div>
+
+            <div class="exp-block" data-version="both">
+                <div class="exp-header"><span class="exp-company">Группа проектов: ООО «Финансовые партнёры» и HRscanner.</span> <span class="exp-city">Санкт-Петербург</span></div>
+                <div class="exp-title">Руководитель отдела развития</div>
+                <div class="exp-period">Октябрь 2015 - Сентябрь 2016 (1 год)</div>
+                <ul class="exp-list">
+                    <li>Управление единым отделом продаж для двух продуктов одного собственника: франшиза кредитно-брокерской сети и B2B SaaS-сервис по тестированию персонала (HRscanner).</li>
+                    <li>Сформировал отдел: подбор, обучение, система мотивации и KPI.</li>
+                    <li>Финансовые Партнеры: стратегия продаж франшизы, скрипты, маркетинг и бюджетирование, упаковка продукта.</li>
+                    <li>HRscanner: коммерческая политика SaaS-сервиса, удержание клиентов, приоритизация доработок с командой разработки.</li>
+                    <li>Совмещал функции Product Manager: ТЗ на доработку ERP и сайтов, контроль исполнения.</li>
+                    <li>Автоматизировал процессы продаж, сократив время обработки заявок.</li>
+                </ul>
+            </div>
+
+            <div class="exp-block" data-version="both">
+                <div class="exp-header"><span class="exp-company">ООО «Центр Консалтинга и Продажи Бизнеса».</span> <span class="exp-city">Санкт-Петербург | Май 2012 - Март 2014</span></div>
+                <div style="margin-bottom: 15px;">
+                    <div class="exp-title">Директор по развитию</div>
+                    <div class="exp-period">Январь 2013 - Март 2014 (1 год и 3 месяца)</div>
+                    <ul class="exp-list">
+                        <li>Запустил и вывел на операционную рентабельность 4 бизнес-юнита с нуля (бухгалтерский аутсорсинг, юридические услуги, IT-разработка, финансовый консалтинг).</li>
+                        <li>Обеспечил рост штата в 3 раза, открыл второй офис без потери маржинальности.</li>
+                        <li>Провёл реинжиниринг процессов и автоматизацию: доработана ERP-система, цикл сделки снижен в 2 раза.</li>
+                        <li>Внедрил системы мотивации и наставничества, обеспечив рост среднего чека на 40%.</li>
+                    </ul>
+                </div>
+                <div style="margin-bottom: 18px;">
+                    <div class="exp-title">Бизнес-брокер</div>
+                    <div class="exp-period">Май 2012 - Июль 2013 (1 год и 3 месяца)</div>
+                    <ul class="exp-list">
+                        <li>Полный цикл сопровождения сделок купли-продажи бизнеса (от 1 до 90 млн руб).</li>
+                        <li>Стабильно в топ-2 брокеров компании: перевыполнение плана на 130–140% (более 1 млн руб./мес).</li>
+                        <li>4–6 сделок в месяц, средний цикл 35–45 дней.</li>
+                        <li>Разрабатывал юридическую и финансовую структуру сделок, минимизируя риски.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="exp-block short-hide" data-version="full">
+                <div class="exp-header"><span class="exp-company">ГК Плюс / Смарт Инвест.</span> <span class="exp-city">Санкт-Петербург</span></div>
+                <div class="exp-title">Руководитель направления</div>
+                <div class="exp-period">Сентябрь 2014 - Июль 2015 (11 месяцев)</div>
+                <ul class="exp-list">
+                    <li>Запуск нового бизнес-юнита по купле-продаже готового бизнеса внутри группы компаний рынка недвижимости.</li>
+                    <li>С нуля разработал концепцию, бизнес-план и операционную модель направления. Сформировал полный пакет юридической и процессной документации (договоры, регламенты, KPI).</li>
+                    <li>Обеспечил выход на плановые показатели по объёму клиентской базы и выручке в соответствии с бизнес-планом.</li>
+                    <li>Автоматизировал ключевые процессы управления клиентским портфелем, внедрил систему мотивации на основе персональных KPI для брокеров.</li>
+                    <li>В рамках личного участия сопровождал первые сделки для отладки бизнес-процессов и последующей стандартизации работы команды.</li>
+                </ul>
+            </div>
+
+            <div class="exp-block short-hide" data-version="full">
+                <div class="exp-header"><span class="exp-company">ООО «ИнфоПром Консалтинг».</span> <span class="exp-city">Санкт-Петербург</span></div>
+                <div class="exp-title">Руководитель проектов</div>
+                <div class="exp-period">Июнь 2015 - Октябрь 2015 (5 месяцев)</div>
+                <ul class="exp-list">
+                    <li>Привлечён для реализации ключевого проекта компании: полный цикл продажи и внедрения ПО менеджмента качества для производства международного концерна Otis (Отис Лифт).</li>
+                    <li>Провёл переговоры на уровне высшего руководства, предпроектный аудит и согласование конфигурации решения.</li>
+                    <li>Сформировал внутренние ТЗ для команд разработки и специалистов по качеству, обеспечив точное соответствие проекта интеграции продукта требованиям заказчика.</li>
+                    <li>Успешно закрыл сделку, обеспечил подписание контракта и получение оплаты в рамках проектного периода.</li>
+                </ul>
+            </div>
+
+            <div class="exp-block short-hide" data-version="full">
+                <div class="exp-header"><span class="exp-company">ООО «ЛесКомплект».</span> <span class="exp-city">Санкт-Петербург</span></div>
+                <div class="exp-title">Финансовый аналитик</div>
+                <div class="exp-period">Июнь 2012 - Март 2013 (10 месяцев)</div>
+                <ul class="exp-list">
+                    <li>Провёл расчёт себестоимости лесозаготовки с учётом логистики по различным районам и округам, что легло в основу управленческих решений по выбору оптимальных участков.</li>
+                    <li>Осуществил финансовое сопровождение и оформление лизинговой сделки по приобретению оборудования для Выборгского целлюлозно-бумажного комбината с последующей передачей в пользование компании.</li>
+                </ul>
+            </div>
+
+            <div class="exp-block short-hide" data-version="full">
+                <div class="exp-header"><span class="exp-company">ЗАО ЭР-Телеком Холдинг.</span> <span class="exp-city">Санкт-Петербург</span></div>
+                <div class="exp-title">Менеджер по продажам B2C</div>
+                <div class="exp-period">Март 2011 - Январь 2012 (11 месяцев)</div>
+                <ul class="exp-list">
+                    <li>Обеспечивал стабильное перевыполнение плана продаж услуг физическим лицам (в среднем в 2 раза с первого месяца работы).</li>
+                    <li>Проводил презентации услуг, заключал договоры, осуществлял информационное сопровождение абонентов.</li>
+                </ul>
+            </div>
+
+            <div class="exp-block short-hide" data-version="full">
+                <div class="exp-header"><span class="exp-company">Гарант-СПБ-Сервис.</span> <span class="exp-city">Санкт-Петербург</span></div>
+                <div class="exp-title">Менеджер по продажам B2B</div>
+                <div class="exp-period">Октябрь 2010 - Январь 2011 (4 месяца)</div>
+                <ul class="exp-list">
+                    <li>Вёл переговоры с первыми лицами компаний, готовил коммерческие предложения.</li>
+                    <li>Стабильно выполнял планы продаж, демонстрируя высокие результаты.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleVersion(version) {
+        const blocks = document.querySelectorAll('.exp-block');
+        const btnFull = document.getElementById('btn-full');
+        const btnShort = document.getElementById('btn-short');
+        if (version === 'short') {
+            blocks.forEach(b => { if(b.classList.contains('short-hide')) b.style.display = 'none'; });
+            btnShort.classList.add('active'); btnFull.classList.remove('active');
+        } else {
+            blocks.forEach(b => { b.style.display = 'block'; });
+            btnFull.classList.add('active'); btnShort.classList.remove('active');
+        }
+        localStorage.setItem('resumeVersion', version);
+    }
+
+            function downloadPDF() {
+        const element = document.getElementById('resume');
+        const ver = document.getElementById('btn-short').classList.contains('active') ? 'Short' : 'Full';
+        const controls = document.querySelector('.controls');
+        const btn = controls.lastElementChild;
+        const originalBtnContent = btn.innerHTML;
+
+        controls.style.opacity = '0'; 
+        controls.style.pointerEvents = 'none';
+        btn.innerHTML = '⏳...';
+        window.scrollTo(0, 0);
+
+        // 🔧 1. ИЗМЕРЯЕМ РЕАЛЬНУЮ ВЫСОТУ КОНТЕНТА ПЕРЕД ГЕНЕРАЦИЕЙ
+        const pxToMm = 0.264583;
+        const dynamicHeight = Math.ceil(element.scrollHeight * pxToMm) + 8; // +8мм страховочный зазор
+
+        const opt = {
+            margin: 0,
+            filename: `Ruzanov_Ivan_Head_of_Sales_${ver}.pdf`,
+            image: { type: 'jpeg', quality: 0.95 },
+            html2canvas: { 
+                scale: 1.5, 
+                useCORS: true, 
+                logging: false,
+                windowWidth: document.documentElement.clientWidth 
+            },
+            jsPDF: { 
+                unit: 'mm', 
+                format: [210, dynamicHeight], // 🔧 2. ПОДСТАВЛЯЕМ РАССЧИТАННУЮ ВЫСОТУ ВМЕСТО 1500
+                orientation: 'portrait' 
+            },
+            pagebreak: { mode: 'avoid-all' }
+        };
+
+        html2pdf().set(opt).from(element).save().then(() => {
+            controls.style.opacity = '1';
+            controls.style.pointerEvents = 'auto';
+            btn.innerHTML = originalBtnContent;
+        }).catch(() => {
+            controls.style.opacity = '1';
+            controls.style.pointerEvents = 'auto';
+            btn.innerHTML = originalBtnContent;
+            
+            // 🔧 3. ОБНОВЛЁННЫЙ ТЕКСТ ПРЕДУПРЕЖДЕНИЯ
+            if(confirm('Ваш браузер не смог сгенерировать длинный PDF автоматически. Использовать системную печать (Ctrl+P)?')) {
+                window.print();
+            }
+        });
+    }
+    function updatePhotoAnimation() {
+        const widthPx = window.innerWidth;
+        const mmToPx = 3.7795275591;
+        const widthMm = widthPx / mmToPx;
+        
+        const maxMm = 170;
+        const minMm = 135;
+        
+        const root = document.documentElement;
+        
+        if (widthMm >= maxMm) {
+            root.style.setProperty('--photo-opacity', '1');
+            root.style.setProperty('--photo-margin', '0px');
+        } else if (widthMm <= minMm) {
+            root.style.setProperty('--photo-opacity', '0.2');
+            root.style.setProperty('--photo-margin', '-100px');
+        } else {
+            const ratio = (maxMm - widthMm) / (maxMm - minMm);
+            const opacity = 1 - (ratio * 0.8);
+            const margin = ratio * -100;
+            root.style.setProperty('--photo-opacity', opacity.toFixed(3));
+            root.style.setProperty('--photo-margin', `${margin.toFixed(1)}px`);
+        }
+    }
+    
+    window.addEventListener('resize', updatePhotoAnimation, { passive: true });
+    window.addEventListener('DOMContentLoaded', updatePhotoAnimation);
+    window.addEventListener('load', () => toggleVersion(localStorage.getItem('resumeVersion') || 'full'));
+</script>
+</body>
+</html>
