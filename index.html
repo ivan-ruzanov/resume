@@ -109,6 +109,15 @@
             .btn-icon { width: 12px; height: 12px; margin-bottom: 2px; }
             .btn-main { font-size: 9px; }
             .btn-sub { font-size: 6px; }
+            .contact-list {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important; /* Фиксированный отступ между ВСЕМИ пунктами */
+    }
+    
+    .contact-item {
+        margin-bottom: 0 !important; /* Убираем старые отступы, чтобы не суммировались с gap */
+    }
         }
 
         /* ЛИСТ РЕЗЮМЕ */
