@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- 🔒 Meta-теги безопасности -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    
+    <!-- 🔍 SEO и описание -->
+    <meta name="description" content="Рузанов Иван | Специалист по подбору менеджеров по продажам. 70+ собеседований, стандартизация найма, скоринг-матрицы. Опыт в Яндексе.">
+    
+    <!-- 🔗 Open Graph для соцсетей -->
+    <meta property="og:title" content="Рузанов Иван — Специалист по подбору | Точка Банк">
+    <meta property="og:description" content="13 лет в B2B | 70+ собеседований | Системный подбор коммерческих команд | Открыт к предложениям">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://iruzanov.ru/hr">
+    <meta property="og:image" content="https://iruzanov.ru/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Рузанов Иван — Специалист по подбору">
+    <meta property="og:locale" content="ru_RU">
+    <meta property="og:site_name" content="Рузанов Иван | Резюме">
+    
+    <!-- 🐦 Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Рузанов Иван — Специалист по подбору | Точка Банк">
+    <meta name="twitter:description" content="13 лет в B2B | 70+ собеседований | Системный подбор коммерческих команд">
+    <meta name="twitter:image" content="https://iruzanov.ru/og-image.png">
+    
+    <title>Рузанов Иван — Специалист по подбору | Точка Банк</title>
+    
+    <!-- 🔹 Фавикон -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23FF0000'/%3E%3Ctext x='50' y='69' font-family='Arial' font-size='64' font-weight='bold' fill='%23FFFFFF' text-anchor='middle'%3EIR%3C/text%3E%3C/svg%3E">
+    
+    <!-- 🔧 Preload шрифтов -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Open+Sans:wght@300;400;600&display=swap" as="style">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #f4f4f4;
+            font-family: 'Open Sans', sans-serif;
+            color: #333;
+            line-height: 1.5;
+            padding: 20px;
+        }
+        
+        /* 🔹 КНОПКИ */
+        .controls {
+            position: fixed;
+            left: 15px;
+            top: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .control-btn {
+            width: 62px;
+            height: 62px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s ease;
+            padding: 0;
+            overflow: hidden;
+        }
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        }
+        .control-btn.active {
+            background: #1a1a1a;
+            color: #fff;
+            border-color: #1a1a1a;
+        }
+        .btn-main { font-size: 10px; font-weight: 500; line-height: 1.2; }
+        .btn-sub { font-size: 7px; font-weight: 300; opacity: 0.8; margin-top: 1px; }
+        .btn-icon { width: 14px; height: 14px; margin-bottom: 3px; fill: currentColor; }
+
+        @media (max-width: 150mm) {
+            .controls {
+                left: 50%;
+                top: 24px;
+                transform: translateX(-50%);
+                flex-direction: row;
+                gap: 8px;
+            }
+            .control-btn { width: 54px; height: 54px; }
+            .btn-icon { width: 12px; height: 12px; margin-bottom: 2px; }
+            .btn-main { font-size: 9px; }
+            .btn-sub { font-size: 6px; }
+        }
+
+        /* ЛИСТ РЕЗЮМЕ */
+        .canvas {
+            width: 100%;
+            max-width: 230mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            background: #fff;
+            padding-top: 15mm;
+            padding-bottom: 15mm;
+            padding-left: clamp(8mm, 9.5vw, 20mm);
+            padding-right: clamp(8mm, 9.5vw, 20mm);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        /* ШАПКА */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: visible;
+        }
+        .header-text { position: relative; z-index: 2; flex-shrink: 0; }
+        .job-cat {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .name {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            font-size: 44px;
+            line-height: 1.1;
+            color: #000;
+            margin-left: -3px;
+        }
+        .name br.break-name { display: none; }
+        
+        .photo {
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            max-width: 100%;
+            position: relative;
+            z-index: 1;
+            opacity: var(--photo-opacity, 1);
+            margin-left: var(--photo-margin, 0);
+            will-change: opacity, margin-left;
+        }
+
+        .divider {
+            border-top: 1px solid #000;
+            opacity: 0.12;
+            margin: 25px 0;
+        }
+
+        /* ОСНОВНАЯ РАСКЛАДКА */
+        .content { display: flex; gap: 40px; }
+        .col-left {
+            width: 220px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding-right: 25px;
+            border-right: 1px solid rgba(0,0,0,0.12);
+        }
+        .col-right { flex: 1; }
+        .col-right-full { width: 100%; }
+
+        h3 {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 300;
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: #000;
+        }
+
+        /* КОНТАКТЫ */
+        .contact-list { list-style-type: none; padding: 0; margin: 0; width: 100%; display: flex; flex-direction: column; gap: 8px; }
+        .contact-list li { margin: 0; padding: 0; }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+        }
+        .contact-icon { width: 16px; height: 16px; object-fit: contain; opacity: 0.6; flex-shrink: 0; }
+        .contact-link { text-decoration: none; color: inherit; cursor: pointer; display: block; width: 100%; }
+        .contact-link:hover .contact-item { opacity: 0.7; }
+
+        /* НАВЫКИ */
+        .skills { list-style: none; padding: 0; margin: 0; }
+        .skills li {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            font-size: 12px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 3px;
+        }
+
+        /* ЦЕЛЕВАЯ ПОЗИЦИЯ */
+        .target-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; gap: 10px; }
+        .salary { font-family: 'Open Sans', sans-serif; font-weight: 400; font-size: 18px; color: #999999; white-space: nowrap; }
+        .target-text { font-family: 'Montserrat', sans-serif; font-weight: 300; font-size: 12px; line-height: 1.6; color: #333; margin-bottom: 25px; }
+        .target-link { color: #555; text-decoration: none; font-weight: 400; }
+        .target-link:hover { text-decoration: underline; }
+
+        /* ПРОФИЛЬ */
+        .profile-text {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #000;
+            text-align: justify;
+            margin-bottom: 25px;
+        }
+
+        /* ОПЫТ */
+        .exp-block { margin-bottom: 25px; }
+        .exp-company { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 12px; color: #000; }
+        .exp-city { font-family: 'Montserrat', sans-serif; font-weight: 300; font-size: 12px; color: #000; }
+        .exp-title { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 12px; margin: 6px 0 3px; color: #000; }
+        .exp-period { font-family: 'Montserrat', sans-serif; font-weight: 300; font-size: 12px; color: #666666; margin-bottom: 6px; }
+        .exp-subtitle { font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 12px; color: #666666; margin: 10px 0 4px; }
+        .exp-list { padding-left: 18px; margin: 0; }
+        .exp-list li {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            font-size: 12px;
+            color: #666666;
+            line-height: 1.5;
+            margin-bottom: 4px;
+            list-style-type: disc;
+        }
+
+        /* ТАБЛИЦА СООТВЕТСТВИЯ - на всю ширину */
+        .match-section { width: 100%; margin: 24px 0 0 0; }
+        .match-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        .match-table th, .match-table td { padding: 8px 10px; text-align: left; vertical-align: top; border-bottom: 1px solid rgba(0,0,0,0.12); }
+        .match-table th { font-family: 'Montserrat', sans-serif; font-weight: 500; color: #000; width: 45%; }
+        .match-table td { font-family: 'Montserrat', sans-serif; font-weight: 300; color: #666; }
+
+        /* ГИПОТЕЗЫ - серый стиль */
+        .hypotheses { 
+            background: #fafafa; 
+            border-left: 3px solid #999; 
+            padding: 14px 18px; 
+            border-radius: 0 4px 4px 0; 
+            margin: 20px 0 0 0; 
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            font-size: 12px;
+            color: #666;
+            line-height: 1.6;
+        }
+        .hypotheses strong { color: #000; font-weight: 500; }
+        .hypotheses ol { padding-left: 20px; margin: 8px 0 0 0; }
+        .hypotheses li { margin-bottom: 8px; }
+        .hypotheses li:last-child { margin-bottom: 0; }
+
+        /* АДАПТИВНОСТЬ */
+        @media (max-width: 198mm) {
+            .target-header { flex-direction: column; align-items: flex-start; gap: 4px; }
+            .name br.break-name { display: inline; }
+        }
+        @media (max-width: 150mm) {
+            .content { flex-direction: column; gap: 25px; }
+            .col-left { display: contents; }
+            .block-contacts {
+                order: 1; width: 100%;
+                border-right: none; border-bottom: 1px solid rgba(0,0,0,0.12);
+                padding-right: 0; padding-bottom: 15px;
+            }
+            .col-right { order: 2; width: 100%; }
+            .block-skills { order: 3; width: 100%; }
+            .skills { column-count: 2; column-gap: 20px; }
+        }
+
+        /* ПЕЧАТЬ */
+        @media print {
+            @page { size: auto; margin: 0; }
+            body { background: #fff; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .controls { display: none !important; }
+            .canvas { box-shadow: none; margin: 0; width: 210mm; max-width: 210mm; padding: 15mm 20mm; min-height: auto; overflow: visible; }
+            .header { flex-direction: row !important; }
+            .header-text { z-index: 2 !important; }
+            .photo { opacity: 1 !important; margin-left: 0 !important; z-index: 1 !important; }
+            .name br.break-name { display: none !important; }
+            .target-header { flex-direction: row !important; }
+            .content { flex-direction: row !important; gap: 40px; }
+            .col-left { display: flex !important; width: 220px; border-right: 1px solid rgba(0,0,0,0.12); border-bottom: none; padding-right: 25px; padding-bottom: 0; }
+            .block-contacts, .block-skills, .col-right, .col-right-full { order: unset !important; width: auto !important; }
+            .skills { column-count: 1 !important; }
+            .match-section { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 🔹 КНОПКИ (только PDF) -->
+    <div class="controls">
+        <button type="button" class="control-btn" onclick="downloadPDF()" aria-label="Скачать PDF">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span class="btn-main">PDF</span>
+        </button>
+    </div>
+
+<div class="canvas" id="resume">
+    <!-- ШАПКА -->
+    <header class="header">
+        <div class="header-text">
+            <div class="job-cat">Специалист по подбору менеджеров по продажам</div>
+            <h1 class="name">Рузанов<br>Иван <br class="break-name">Андреевич</h1>
+        </div>
+        <img src="photo.png" class="photo" alt="Фото Рузанова Ивана" loading="eager">
+    </header>
+
+    <div class="divider"></div>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
+    <div class="content">
+        <div class="col-left">
+            <!-- КОНТАКТЫ -->
+            <div class="block-contacts">
+                <h3>Контакты</h3>
+                <ul class="contact-list">
+                    <li>
+                        <a href="mailto:ivanruzanov@gmail.com" class="contact-link">
+                            <div class="contact-item">
+                                <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                                ivanruzanov@gmail.com
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <div class="contact-item">
+                            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            Санкт-Петербург
+                        </div>
+                    </li>
+                    <li>
+                        <a href="tel:+79117666600" class="contact-link">
+                            <div class="contact-item">
+                                <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                </svg>
+                                +7 911 766 66 00
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://t.me/ivanruzanov" target="_blank" rel="noopener noreferrer" class="contact-link">
+                            <div class="contact-item">
+                                <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 2L11 13"></path>
+                                    <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+                                </svg>
+                                @ivanruzanov
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- НАВЫКИ -->
+            <div class="block-skills">
+                <h3>Навыки</h3>
+                <ul class="skills">
+                    <!-- HR / Подбор -->
+                    <li>Подбор и оценка продавцов</li>
+                    <li>Онлайн/офлайн интервью, кейсы</li>
+                    <li>Скоринг-матрицы, тестовые задания</li>
+                    <li>Построение воронок найма</li>
+                    <li>ТЗ для рекрутеров, анализ резюме</li>
+                    <li>Онбординг и наставничество</li>
+                    <li>Обучение: найм, DISC, продукт</li>
+                    <li>HR-аналитика: time-to-hire, conversion</li>
+                    <!-- Sales Leadership (релевантные) -->
+                    <li>Управление командой</li>
+                    <li>Управление продажами</li>
+                    <li>Enterprise Sales и B2B</li>
+                    <li>Кросс-функциональное взаимодействие</li>
+                    <li>Аналитика данных (Looker, Excel)</li>
+                    <li>Наставничество и развитие лидеров</li>
+                    <li>Самоорганизация, Agile / Scrum</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-right-full">
+            <!-- ЦЕЛЕВАЯ ПОЗИЦИЯ -->
+            <div class="target-header">
+                <h3>Целевая позиция</h3>
+                <span class="salary">от 150 000 ₽</span>
+            </div>
+            <div class="target-text">
+                <a href="https://hr.tochka.com/vacancies/catalog/menedzher-po-podboru-personala-sankt-peterburg/" target="_blank" rel="noopener noreferrer" class="target-link">
+                    Специалист по подбору менеджеров по продажам | Точка Банк
+                </a>
+            </div>
+            <div class="divider"></div>
+
+            <!-- ПРОФИЛЬ -->
+            <h3>Профессиональный профиль</h3>
+            <div class="profile-text">
+                13 лет в B2B, из них 4,5 года в Яндексе системно занимался подбором, оценкой и развитием коммерческих команд. Провёл 100+ собеседований, стандартизировал процесс найма на уровне дивизиона, внедрил скоринг-матрицы и двухэтапные тесты. Специализируюсь на «пересборке» команд: беру аутсайдеров, меняю процессы и состав, вывожу в топ-1.<br><br>
+                <strong>Почему переход в HR:</strong> как руководитель я видел, что 80% успеха команды закладывается на этапе найма. Понимаю портрет идеального продавца изнутри — не по теории, а по практике закрытия сделок и управления выручкой. Хочу применять этот опыт системно, помогая Точке находить и развивать амбициозных менеджеров через данные, эксперименты и автономию. Мне интересно развиваться именно в направлении HR, потому что это позволяет масштабировать своё влияние: вместо управления одной командой — формировать культуру найма и развития для десятков команд. Вижу в этом возможность создавать долгосрочную ценность для бизнеса, работая на опережение.
+            </div>
+            <div class="divider"></div>
+
+            <!-- ОПЫТ -->
+            <h3>Опыт</h3>
+            
+            <!-- ЯНДЕКС -->
+            <div class="exp-block">
+                <div class="exp-header"><span class="exp-company">Яндекс.Реклама</span> <span class="exp-city">Санкт-Петербург | 2021–2025</span></div>
+                
+                <div style="margin-bottom: 18px;">
+                    <div class="exp-title">Руководитель команды KAM</div>
+                    <div class="exp-period">2024–2025</div>
+                    <ul class="exp-list">
+                        <li>Принял кросс-функциональную команду из 12 человек (8 менеджеров + 4 аналитика) с худшими метриками в подразделении.</li>
+                        <li>Внедрил новые стандарты работы и воронку. Обновил состав на 70%. За квартал команда вышла в топ-1 по всем показателям.</li>
+                        <li>Выстроил процесс подбора: профиль компетенций → скоринг → оффер. Провёл 30+ собеседований (онлайн + офлайн, очные финалы).</li>
+                        <li>Запустил систему наставничества: новые сотрудники выходили на план за 2–3 месяца вместо 5–6.</li>
+                        <li>Проводил внутренние обучения: продукт, планирование, коммуникации (DISC).</li>
+                    </ul>
+                </div>
+
+                <div style="margin-bottom: 18px;">
+                    <div class="exp-title">Руководитель команды SMB</div>
+                    <div class="exp-period">2022–2024</div>
+                    <ul class="exp-list">
+                        <li>Принял команду из 8 человек (аутсайдер), пересобрал систему работы: воронка, фидбек, распределение лидов. За 6 месяцев — №1 в отделе по выручке и качеству.</li>
+                        <li>Полностью собрал две дополнительные аналогичные команды, провел 70+ собеседований (индивидуальные и ассесмент, онлайн + офлайн).</li>
+                        <li>Стандартизировал найм на уровне дивизиона: описал процесс от ТЗ рекрутеру до оффера, внедрил единый скоринг и чек-лист адаптации.</li>
+                        <li>Разработал двухэтапные тестовые задания (практика продаж + аналитика клиентских баз).</li>
+                        <li>Провёл серию обучений по найму для 20+ руководителей и старших менеджеров подразделения.</li>
+                        <li>Выстроил систему продуктового обучения: квартальные тесты команды выросли с 65% до >83%.</li>
+                        <li>Вырастил 5 тимлидов из внутренних сотрудников, разработал для них IDP.</li>
+                    </ul>
+                </div>
+
+                <div style="margin-bottom: 18px;">
+                    <div class="exp-title">Менеджер по развитию клиентов</div>
+                    <div class="exp-period">2021</div>
+                    <ul class="exp-list">
+                        <li>За 6 месяцев вышел на 120% эффективности (перевыполнение плана в 2 раза). Повышен до руководителя за результат.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- РАННИЙ ОПЫТ -->
+            <div class="exp-block">
+                <div class="exp-header"><span class="exp-company">Фонд поддержки слепоглухих «Со-единение»</span> <span class="exp-city">Санкт-Петербург</span></div>
+                <div class="exp-title">Руководитель проектов</div>
+                <div class="exp-period">Май 2019 – Февраль 2021</div>
+                <ul class="exp-list">
+                    <li>Выстроил управление проектами в НКО без профильного опыта. Обеспечил 100% прозрачность бюджета, успешный аудит Казначейства РФ.</li>
+                </ul>
+            </div>
+
+            <div class="exp-block">
+                <div class="exp-header"><span class="exp-company">УК «Дети на паркете»</span> <span class="exp-city">Санкт-Петербург | 2016–2018</span></div>
+                <div class="exp-title">Директор по франчайзингу</div>
+                <ul class="exp-list">
+                    <li>Собрал с нуля отделы продаж (4 чел.) и сопровождения (5 чел.): найм, обучение, стандарты, KPI.</li>
+                    <li>Масштабировал сеть с 15 до 122 филиалов, загрузка точек >70%, окупаемость 2–4 мес.</li>
+                </ul>
+            </div>
+
+            <div class="exp-block">
+                <div class="exp-header"><span class="exp-company">Финансовые партнёры / HRscanner</span> <span class="exp-city">Санкт-Петербург | 2015–2016</span></div>
+                <div class="exp-title">Руководитель отдела развития</div>
+                <ul class="exp-list">
+                    <li>Сформировал команду с нуля для двух продуктов: подбор, обучение, система мотивации и KPI.</li>
+                    <li>Выстроил процесс удержания клиентов и приоритизации доработок с разработкой.</li>
+                </ul>
+            </div>
+
+            <div class="exp-block">
+                <div class="exp-header"><span class="exp-company">ООО «Центр Консалтинга и Продажи Бизнеса»</span> <span class="exp-city">Санкт-Петербург</span></div>
+                <div class="exp-title">Директор по развитию</div>
+                <div class="exp-period">Январь 2013 - Март 2014 (1 год и 3 месяца)</div>
+                <ul class="exp-list">
+                    <li>Запустил и вывел на операционную рентабельность 4 бизнес-юнита с нуля (бухгалтерский аутсорсинг, юридические услуги, IT-разработка, финансовый консалтинг).</li>
+                    <li>Обеспечил рост штата в 3 раза, открыл второй офис без потери маржинальности.</li>
+                    <li>Провёл реинжиниринг процессов и автоматизацию: доработана ERP-система, цикл сделки снижен в 2 раза.</li>
+                    <li>Внедрил системы мотивации и наставничества, обеспечив рост среднего чека на 40%.</li>
+                </ul>
+            </div>
+
+            <!-- ТАБЛИЦА СООТВЕТСТВИЯ (на всю ширину) -->
+            <div class="match-section">
+                <h3>Соответствие требованиям Точки</h3>
+                <table class="match-table">
+                    <tr><th>Подбор в продажи от 2 лет</th><td>4,5 года системного найма и оценки коммерческих команд в Яндексе + построение отделов с нуля</td></tr>
+                    <tr><th>Онлайн-собеседования</th><td>100+ интервью (онлайн + офлайн), панельные форматы, кейсы</td></tr>
+                    <tr><th>Инструменты оценки</th><td>Скоринг-матрицы, 2-этапные тесты, probation-KPI, чек-листы адаптации</td></tr>
+                    <tr><th>Работа без контроля</th><td>Запуск процессов с нуля, управление распределёнными командами, решения на данных</td></tr>
+                    <tr><th>Аналитика и дашборды</th><td>Looker/Excel, воронки найма, time-to-hire, conversion, retention</td></tr>
+                    <tr><th>Простота в сложном</th><td>13 лет в B2B-переговорах, обучение руководителей, фасилитация, наставничество</td></tr>
+                </table>
+            </div>
+
+            <!-- ГИПОТЕЗЫ (серый стиль, усиленный контент) -->
+            <div class="hypotheses">
+                <strong>💡 Гипотезы для Точки (что могу улучшить в подборе):</strong>
+                <ol>
+                    <li><strong>Скоринг откликов через AI:</strong> протестировать автоматическую разметку резюме по ключевым компетенциям (опыт продаж, работа с CRM, метрики), чтобы рекрутеры фокусировались на релевантных кандидатах и сокращали time-to-screen на 30–40%.</li>
+                    <li><strong>Групповые ассессменты для финалистов:</strong> запуск онлайн-кейсов в формате «продай нам Точку» или «разбери возражение», чтобы оценивать не только софт-скиллы, но и реальное мышление в продажах, стрессоустойчивость и клиентоцентричность.</li>
+                    <li><strong>Онбординг через менторство:</strong> закрепить за каждым новым менеджером наставника из топ-3 команды с чёткими чек-поинтами на первые 30/60/90 дней — это сократит time-to-productivity и повысит удержание на испытательном сроке.</li>
+                    <li><strong>Единая база знаний по найму:</strong> собрать и структурировать лучшие практики интервью, типовые вопросы, красные флаги и успешные кейсы в одном месте (Notion/Confluence) — это ускорит адаптацию новых рекрутеров и повысит консистентность оценки.</li>
+                    <li><strong>Обратная связь кандидатам как часть EVP:</strong> внедрить обязательный фидбек даже тем, кто не прошёл отбор — это усиливает репутацию Точки на рынке труда и повышает вероятность возврата сильных кандидатов в будущем.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function downloadPDF() {
+        const filename = 'Ivan-Ruzanov-HR-Tochka.pdf';
+        const link = document.createElement('a');
+        link.href = filename;
+        link.setAttribute('download', filename);
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function updatePhotoAnimation() {
+        const widthPx = window.innerWidth;
+        const mmToPx = 3.7795275591;
+        const widthMm = widthPx / mmToPx;
+        const maxMm = 170, minMm = 135;
+        const root = document.documentElement;
+        
+        if (widthMm >= maxMm) {
+            root.style.setProperty('--photo-opacity', '1');
+            root.style.setProperty('--photo-margin', '0px');
+        } else if (widthMm <= minMm) {
+            root.style.setProperty('--photo-opacity', '0.2');
+            root.style.setProperty('--photo-margin', '-100px');
+        } else {
+            const ratio = (maxMm - widthMm) / (maxMm - minMm);
+            root.style.setProperty('--photo-opacity', (1 - ratio * 0.8).toFixed(3));
+            root.style.setProperty('--photo-margin', (ratio * -100).toFixed(1) + 'px');
+        }
+    }
+    
+    window.addEventListener('resize', updatePhotoAnimation, { passive: true });
+    window.addEventListener('DOMContentLoaded', () => {
+        updatePhotoAnimation();
+    });
+</script>
+
+<!-- 🔍 Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Рузанов Иван Андреевич",
+  "jobTitle": "Специалист по подбору менеджеров по продажам",
+  "description": "Системный подбор коммерческих команд | 70+ собеседований | Стандартизация найма",
+  "url": "https://iruzanov.ru/hr",
+  "email": "mailto:ivanruzanov@gmail.com",
+  "telephone": "+79117666600",
+  "address": { "@type": "PostalAddress", "addressLocality": "Санкт-Петербург", "addressCountry": "RU" },
+  "sameAs": ["https://t.me/ivanruzanov"],
+  "knowsAbout": ["Подбор персонала", "Оценка компетенций", "HR-аналитика", "B2B продажи", "Управление командой"]
+}
+</script>
+
+<script>
+  if (window.visualViewport) {
+    const controls = document.querySelector('.controls');
+    window.visualViewport.addEventListener('resize', () => { controls.style.top = '24px'; });
+  }
+</script>
+</body>
+</html>
